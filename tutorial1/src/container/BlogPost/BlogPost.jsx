@@ -7,8 +7,97 @@ class Blog extends Component{
     constructor(props){
         super(props);
         this.state={
-            posts:[]
+            posts:[],
+            formBlogPost:{
+                userId:1,
+                id:1,
+                title:'',
+                body:''
+            },
+            isUpdate:false
         }
+    }
+
+    getPostAPI = () => {
+        axios.get('http://localhost:9000/posts?_sort=id&_order=desc&_limit=10')
+        .then((result) => {
+            // console.log(result.data);
+            this.setState({
+                posts:result.data
+            })
+        })
+    }
+
+    postDataToAPI = () => {
+        axios.post('http://localhost:9000/posts/',this.state.formBlogPost).then((result)=> {
+            this.getPostAPI();
+            this.setState({
+                formBlogPost:{
+                    userId:1,
+                    id:1,
+                    title:'',
+                    body:''
+                },
+                isUpdate:false
+            })
+        },(err) => {
+            console.log('error:',err);
+        })
+    };
+
+    putDataToAPI = (data) => {
+        if(data.id !== 'undefined'){
+            axios.put(`http://localhost:9000/posts/${data.id}`,data).then((result)=> {
+                this.getPostAPI();
+                this.setState({
+                    formBlogPost:{
+                        userId:1,
+                        id:1,
+                        title:'',
+                        body:''
+                    },
+                    isUpdate:false
+                })
+            })
+        }
+    }
+
+    handleRemove = (id) =>{
+        if(id !== 'undefined'){
+            axios.delete(`http://localhost:9000/posts/${id}`).then((result)=> {
+                this.getPostAPI();
+            })
+        }
+    }
+    
+    handleUpdate = (data) =>{
+        this.setState({
+            formBlogPost:data,
+            isUpdate:true
+        })
+    }
+
+    handleFormChange = (event) =>{
+        let timestamp = new Date().getTime();
+        let formBlogPostNew = {...this.state.formBlogPost};
+        if(!this.state.isUpdate){
+            formBlogPostNew['id'] = timestamp;
+        }
+        formBlogPostNew[event.target.name] = event.target.value;
+        this.setState({
+            formBlogPost:formBlogPostNew
+        },() => {
+            // console.log(this.state.formBlogPost);
+        })
+    }
+
+    handleSubmit = () => {
+        if(this.state.isUpdate){
+            this.putDataToAPI(this.state.formBlogPost);
+        }else{
+            this.postDataToAPI();
+        }
+        // console.log(this.state.formBlogPost);
     }
 
     componentDidMount() {
@@ -20,22 +109,28 @@ class Blog extends Component{
         //         })
         //     })
 
-        axios.get('https://jsonplaceholder.typicode.com/posts')
-        .then((res) => {
-            // console.log(res.data);
-            this.setState({
-                posts:res.data
-            })
-        })
+        // axios.get('https://jsonplaceholder.typicode.com/posts')
+        
+        this.getPostAPI();
+
     }
+
 
     render(){
         return (
             <Fragment>
                 <p className="section-title"> Blog Post</p>
+                <div className="form-add-post">
+                    <label htmlFor="title">Title</label>
+                    <input value={this.state.formBlogPost.title} type="text" name="title" onChange={this.handleFormChange} placeholder="add title" id="title" autoFocus />
+
+                    <label htmlFor="body">Blog Content</label>  
+                    <textarea value={this.state.formBlogPost.body} name="body" id="body" onChange={this.handleFormChange} cols="30" rows="10" placeholder="add body content"></textarea>
+                    <button className="btn-submit" onClick={this.handleSubmit}>Simpan</button>
+                </div>
                 {
                     this.state.posts.map(post => {
-                        return <Post key={post.id} title={post.title} desc={post.body} />
+                        return <Post key={post.id} data={post} remove={this.handleRemove} update={this.handleUpdate} />
                     })
                 }
             </Fragment>
