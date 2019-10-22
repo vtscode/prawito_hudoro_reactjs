@@ -1,9 +1,11 @@
 import React , {Component} from 'react';
+import Counter from './Counter';
 
 class CardProduct extends Component{
 
     state = {
-        order:4
+        order:4,
+        name:'Riventus'
     }
 
     handleCounterChange = (newVal) =>{
@@ -39,11 +41,7 @@ class CardProduct extends Component{
                 </div>
                 <p className="product-title">SAKMDKAM</p>
                 <p className="product-price">12300</p>
-                <div className="counter">
-                    <button className="minus" onClick={this.handleMinus}>-</button>
-                    <input readOnly type="text" value={this.state.order} />
-                    <button className="plus" onClick={this.handlePlus}>+</button>
-                </div>
+                <Counter />
             </div>
         )
     }

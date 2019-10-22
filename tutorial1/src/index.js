@@ -5,10 +5,18 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 // import Youtube from './component/yt/YTComp';
 import Home from './container/Home/Home';
+// import {createStore} from 'redux';
+// import {Provider} from 'react-redux';
+// import rootReducer from './redux/reducer/globalreducer';
+
+
+// store
+// const storeRedux = createStore(rootReducer);
 
 // folder container itu isi statefull component
 // folder component itu isi stateless component
 
+// ReactDOM.render(<Provider store={storeRedux}><Home /></Provider>, document.getElementById('root'));
 ReactDOM.render(<Home />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
