@@ -1,0 +1,4 @@
+React hook 
+berguna utk membuat state di dalam 
+stateless component 
+artinya di dlm fungsi bisa dibuat state dan diubah2

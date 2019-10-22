@@ -4,6 +4,7 @@ import Product from '../pages/Product/Product';
 import LifeCycleComp from '../pages/LifeCycleComp/LifeCycleComp';
 import Blog from '../pages/BlogPost/BlogPost';
 import DetailPost from '../pages/BlogPost/DetailPost';
+import Hooks from '../pages/Hooks/Hooks';
 import { BrowserRouter as Router,Switch,Route,Link, useRouteMatch,useParams } from "react-router-dom";
 import actionType from '../../redux/reducer/globalActionType';
 import globalProvider from '../../context/Context';
@@ -45,6 +46,9 @@ class Home extends Component{
                         <li>
                             <Link to="/lifecycle">LifeCycle</Link>
                         </li>
+                        <li>
+                            <Link to="/hooks">Hooks</Link>
+                        </li>
                     </ul>
                 </div>
                 <hr/>
@@ -52,6 +56,8 @@ class Home extends Component{
                     <Route path="/detail-post/:postID" component={DetailPost} />
                     <Route path="/product" component={Product} />
                     <Route path="/lifecycle" component={LifeCycleComp} />
+                    <Route path="/hooks" component={Hooks} />
+                    
                 </Fragment>
             </Router>   
         )
