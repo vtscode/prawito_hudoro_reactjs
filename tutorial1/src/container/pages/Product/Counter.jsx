@@ -1,7 +1,7 @@
 import React , {Component} from 'react';
 import {connect} from 'react-redux';
 import actionType from '../../../redux/reducer/globalActionType';
-import { rootContext } from '../../Home/Home';
+import { globalConsumer } from '../../../context/Context';
 
 class Counter extends Component{
 
@@ -36,25 +36,16 @@ class Counter extends Component{
     // }
     
     render(){
-        // console.log(this.props);
+        console.log(this);
         return(
-            <rootContext.Consumer>
-                {
-                    value => {
-                        // console.log(value);
-                        return (
-                            <div className="counter">
-                                {/*<button className="minus" onClick={this.props.handleMinus}>-</button>
-                                <input readOnly type="text" value={this.props.order} />
-                        <button className="plus" onClick={this.props.handlePlus}>+</button>*/}
-                                <button className="minus" onClick={() => value.dispatch({type:actionType.SUBTRACT_ORDER})}>-</button>
-                                <input readOnly type="text" value={value.state.totalOrder} />
-                                <button className="plus" onClick={() => value.dispatch({type:actionType.ADD_ORDER})}>+</button>
-                            </div>
-                        )
-                    }
-                }
-            </rootContext.Consumer>
+            <div className="counter">
+                {/*<button className="minus" onClick={this.props.handleMinus}>-</button>
+                <input readOnly type="text" value={this.props.order} />
+                <button className="plus" onClick={this.props.handlePlus}>+</button>*/}
+                <button className="minus" onClick={() => this.props.dispatch({type:actionType.SUBTRACT_ORDER})}>-</button>
+                <input readOnly type="text" value={this.props.state.totalOrder} />
+                <button className="plus" onClick={() => this.props.dispatch({type:actionType.ADD_ORDER})}>+</button>
+            </div>
         )
     }
 }
@@ -73,4 +64,4 @@ class Counter extends Component{
 // }
 
 // export default connect(mapStateToProps,mapDispatchToProps)(Counter);
-export default Counter;
+export default globalConsumer(Counter);

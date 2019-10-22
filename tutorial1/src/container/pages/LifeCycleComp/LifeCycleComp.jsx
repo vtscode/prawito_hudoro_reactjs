@@ -1,6 +1,6 @@
 import React,{Component,Fragment} from 'react';
 import {connect} from 'react-redux';
-import { rootContext } from '../../Home/Home';
+import { globalConsumer } from '../../../context/Context';
 
 class LifeCycleComp extends Component{
     constructor(props){
@@ -66,23 +66,14 @@ class LifeCycleComp extends Component{
         console.log('render') 
 
         return(
-            <rootContext.Consumer>
-            {
-                value => {
-                    return (
+                <Fragment>
+                    <button className="btn" onClick={this.changeCount}>Component Button {this.state.count}</button>
+                    <hr />
 
-                        <Fragment>
-                            <button className="btn" onClick={this.changeCount}>Component Button {this.state.count}</button>
-                            <hr />
-            
-                            {/*<p>Total Order : {this.props.order}</p>*/}
-                            <p>Total Order : {value.state.totalOrder}</p>
-            
-                        </Fragment>
-                    )
-                }
-            }
-            </rootContext.Consumer>
+                    {/*<p>Total Order : {this.props.order}</p>*/}
+                    <p>Total Order : {this.props.state.totalOrder}</p>
+
+                </Fragment>
             );
     }
 }
@@ -93,4 +84,4 @@ class LifeCycleComp extends Component{
 // }
 
 // export default connect(mapStateToProps)(LifeCycleComp);
-export default LifeCycleComp;
+export default globalConsumer(LifeCycleComp);

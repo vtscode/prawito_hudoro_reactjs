@@ -1,7 +1,7 @@
 import React , {Component,Fragment} from 'react';
 import CardProduct from './CardProduct';
 import { connect } from "react-redux";
-import { rootContext } from '../../Home/Home';
+import { globalConsumer } from '../../../context/Context';
 
 class Product extends Component{
 
@@ -18,30 +18,20 @@ class Product extends Component{
 
     render(){
         return(
-
-            <rootContext.Consumer>
-            {
-                value => {
-                    return (
-
-                        <Fragment>
-                        <div className="header">
-                            <div className="logo">
-                                <img src="asdasd" alt="asd" />
-                            </div>
-                            <div className="troley">
-                                <img src="asdasd" alt="asd" />
-                                {/*<div className="count">{this.props.order}</div>*/}
-                                <div className="count">{value.state.totalOrder}</div>
-                            </div>
-                        </div>
-                        <hr/>
-                        <CardProduct />
-                        </Fragment>
-                    )
-                }
-            }
-            </rootContext.Consumer>
+            <Fragment>
+                <div className="header">
+                    <div className="logo">
+                        <img src="asdasd" alt="asd" />
+                    </div>
+                    <div className="troley">
+                        <img src="asdasd" alt="asd" />
+                        {/*<div className="count">{this.props.order}</div>*/}
+                        <div className="count">{this.props.state.totalOrder}</div>
+                    </div>
+                </div>
+                <hr/>
+                <CardProduct />
+            </Fragment>
         )
     }
 }
@@ -53,4 +43,4 @@ class Product extends Component{
 // }
 
 // export default connect(mapStateToProps)(Product);
-export default Product;
+export default globalConsumer(Product);
