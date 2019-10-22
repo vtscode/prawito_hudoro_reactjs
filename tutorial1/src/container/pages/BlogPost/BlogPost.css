@@ -39,6 +39,9 @@
     color: #3d4a6e;
     margin-bottom: 16px;
 }
+.content p.title:hover{
+    cursor: pointer;
+}
 
 .content p.desc{
     margin:0px;

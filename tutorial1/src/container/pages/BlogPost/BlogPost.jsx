@@ -1,6 +1,6 @@
 import React,{Component,Fragment} from 'react';
 import './BlogPost.css';
-import Post from '../../component/Post/Post';
+import Post from '../../../component/Post/Post';
 import axios from 'axios';
 
 class Blog extends Component{
@@ -77,6 +77,10 @@ class Blog extends Component{
         })
     }
 
+    handleDetail = (id) => {
+        this.props.history.push(`/detail-post/${id}`)
+    }
+
     handleFormChange = (event) =>{
         let timestamp = new Date().getTime();
         let formBlogPostNew = {...this.state.formBlogPost};
@@ -130,7 +134,7 @@ class Blog extends Component{
                 </div>
                 {
                     this.state.posts.map(post => {
-                        return <Post key={post.id} data={post} remove={this.handleRemove} update={this.handleUpdate} />
+                        return <Post key={post.id} data={post} remove={this.handleRemove} update={this.handleUpdate} goDetail={this.handleDetail} />
                     })
                 }
             </Fragment>
