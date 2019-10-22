@@ -137,7 +137,7 @@ class Blog extends Component{
                 </div>
                 {
                     this.state.comments.map( comment => {
-                        return <p>{`${comment.name} dari email ${comment.email}`}</p>
+                        return <p key={comment.id}>{`${comment.name} dari email ${comment.email}`}</p>
                     } )
                 }
                 {

@@ -43,6 +43,7 @@ const Hooks = () => {
         return () => {
             document.title = `ReactJS Hello World`;
         }
+        AbortController.abort()
     });
 
     return (
