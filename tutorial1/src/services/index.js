@@ -1,10 +1,27 @@
-// import React,{Component} from 'react';
-import axios from 'axios';
+import postFunc from './Post'; 
+import putFunc from './Put'; 
+import getFunc from './Get'; 
+import delFunc from './Delete'; 
 
-axios.get('http://localhost:9000/posts?_sort=id&_order=desc&_limit=10')
-    .then((result) => {
-        // console.log(result.data);
-        this.setState({
-            posts:result.data
-        })
-    })
+// GET
+const getNewBlog = () => getFunc('posts?_sort=id&_order=desc&_limit=10',false);
+const getComments = () => getFunc('comments?_sort=id&_order=desc&_limit=10',true);
+
+// POST
+const postNewBlog = (data) => postFunc('posts',false,data);
+
+// PUT
+const updateNewBlog = (data,id) => putFunc(`posts/${id}`,false,data);
+
+// DELETE
+const deleteNewBlog = (id) => delFunc(`posts/${id}`,false);
+
+const API = {
+    getNewBlog,
+    getComments,
+    postNewBlog,
+    updateNewBlog,
+    deleteNewBlog
+}
+
+export default API;
