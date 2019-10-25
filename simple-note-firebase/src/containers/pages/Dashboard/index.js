@@ -1,5 +1,5 @@
 import React, {Component,Fragment} from 'react';
-import { addDataToAPI,getDataFromAPI } from '../../../config/redux/action';
+import { addDataToAPI,getDataFromAPI,updateDataFromAPI,deleteDataFromAPI } from '../../../config/redux/action';
 import { connect } from 'react-redux';
 
 class Dashboard extends Component {
@@ -9,14 +9,15 @@ class Dashboard extends Component {
         this.state= {
             title:'',
             content:'',
-            data:''
+            data:'',
+            textButton:'SIMPAN',
+            noteId:''
         }
     }
 
     componentDidMount() {
         const userData = JSON.parse(localStorage.getItem('userData'));
-
-        console.log(this.props.getNotes(userData.uid));
+        this.props.getNotes(userData.uid);
     }
 
     getDataNotes = () => {
@@ -24,8 +25,8 @@ class Dashboard extends Component {
     }
 
     handleSaveNotes = () => {
-        const {title,content} = this.state;
-        const {saveNotes} = this.props;
+        const {title,content,textButton,noteId} = this.state;
+        const {saveNotes,updateNotes} = this.props;
 
         const userData = JSON.parse(localStorage.getItem('userData'));
 
@@ -35,9 +36,46 @@ class Dashboard extends Component {
             date:new Date().getTime(),
             userId:userData.uid
         }
-        saveNotes(data);
-        // console.log(data);
+        if(textButton === 'SIMPAN'){
+            saveNotes(data);
+        }else{
+            data.noteId = noteId;
+            updateNotes(data);
+        }
+        console.log(data);
     }
+
+    updateNotes = (note) => {
+        // console.log(note)
+        this.setState({
+            title:note.data.title,
+            content:note.data.content,
+            textButton:'UPDATE',
+            noteId:note.id
+        })
+    }
+    
+    delNote = (e,note) => {
+        e.stopPropagation();
+        const {deleteNotes} = this.props;
+        const userData = JSON.parse(localStorage.getItem('userData'));
+
+        const data = {
+            userId:userData.uid,
+            noteId:note.id
+        }
+        deleteNotes(data)
+    }
+    
+    cancelUpdate = () => {
+        // console.log(note)
+        this.setState({
+            title:'',
+            content:'',
+            textButton:'SIMPAN'
+        })
+    }   
+
 
     onInputChange = (e,type) => {
         this.setState({
@@ -46,8 +84,9 @@ class Dashboard extends Component {
     }
     
     render(){
-        const {title,content,date} = this.state;
+        const {title,content,textButton} = this.state;
         const {notes} = this.props;
+        const {cancelUpdate,updateNotes,delNote} = this;
         // console.log('notes',notes);
         return (
             <Fragment>
@@ -57,7 +96,12 @@ class Dashboard extends Component {
                     <br/>
                     <textarea name="desc" id="desc" cols="30" rows="5" placeholder="content" value={content} onChange={(e) => this.onInputChange(e,'content')}></textarea>
                     <br/>
-                    <button onClick={this.handleSaveNotes} >Simpan</button>
+                    {
+                        textButton === 'UPDATE' ? (
+                            <button onClick={cancelUpdate} >Cancel</button>
+                        ) : null
+                    }
+                    <button onClick={this.handleSaveNotes} >{textButton}</button>
                 </div>
                 <hr/>
                 <div>
@@ -67,10 +111,11 @@ class Dashboard extends Component {
                         {
                             notes.map(note => {
                                 return(
-                                    <div key={note.id}>
+                                    <div onClick={() => updateNotes(note)} key={note.id}>
                                         <p>{note.data.title}</p>
                                         <p>{note.data.date}</p>
                                         <p>{note.data.content}</p>
+                                        <button onClick={(e) => delNote(e,note)}>DELETE</button>
                                         <hr/>
                                     </div>
                                 )
@@ -94,7 +139,9 @@ const reduxState = state => ({
 
 const reduxDispatch = dispatch => ({
     saveNotes: (data) => dispatch(addDataToAPI(data)),
-    getNotes: (data) => dispatch(getDataFromAPI(data))
+    getNotes: (data) => dispatch(getDataFromAPI(data)),
+    updateNotes:(data) => dispatch(updateDataFromAPI(data)),
+    deleteNotes: (data) => dispatch(deleteDataFromAPI(data))
 })
 
 export default connect(reduxState,reduxDispatch)(Dashboard);
