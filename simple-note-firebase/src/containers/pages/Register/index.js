@@ -1,5 +1,7 @@
 import React, {Component,Fragment} from 'react';
-import firebase from '../../../config/firebase';
+import ButtonTekan from '../../../components/atoms/Button';
+import { registerUserAPI } from '../../../config/redux/action';
+import {connect} from 'react-redux';
 
 class Register extends Component {
 
@@ -7,7 +9,7 @@ class Register extends Component {
         super(props);
         this.state ={
             email:'',
-            password:''
+            password:'',
         }
     }
 
@@ -18,32 +20,39 @@ class Register extends Component {
         })
     }
     
-    handleRegisterSubmit = () => {
+    handleRegisterSubmit = async () => {
         // console.log(this.state);
-
-        const { email, password } = this.state;
-
-        firebase.auth().createUserWithEmailAndPassword(email, password).then(result => {
-            console.log('success',result);
-        }).catch(function(error) {
-            // Handle Errors here.
-            let errorCode = error.code;
-            let errorMessage = error.message;
-            console.log(errorCode,errorMessage);
-        });
+        const { email,password } = this.state;
+        const res = await this.props.registerAPI({email,password}).catch(err => err);
+        if(res){
+            this.setState({
+                email:'',
+                password:''
+            })
+        }
+        
     }
 
     render(){
         return (
             <Fragment>
                 <p>Register Page</p>
-                <input placeholder="Email" id="email" type="email" onChange={this.handleChangeText} />
-                <input placeholder="Password" id="password" type="password" onChange={this.handleChangeText} />
-                <button onClick={this.handleRegisterSubmit}>Register</button>
+                <input placeholder="Email" id="email" type="email" onChange={this.handleChangeText}value={this.state.email} />
+                <input placeholder="Password" id="password" type="password" onChange={this.handleChangeText} value={this.state.password} />
+                {/*<button onClick={this.handleRegisterSubmit}>Register</button>*/}
                 {/*<button>Go to Dashboard</button>*/}
+                <ButtonTekan saatTekan={this.handleRegisterSubmit} title="Register" loading={this.props.isLoading} />
             </Fragment>
         )
     }
 }
 
-export default Register;
+const reduxState = (state) => ({
+    isLoading: state.isLoading
+})
+
+const reduxDispatch = (dispatch) => ({
+    registerAPI: (data) => dispatch(registerUserAPI(data))
+})
+
+export default connect(reduxState,reduxDispatch)(Register);

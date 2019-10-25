@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './containers/pages/App';
 import * as serviceWorker from './serviceWorker';
-import FirebaseConfig from './config/firebase/index';
+// import FirebaseConfig from './config/firebase';
 
-console.log('config firebase',FirebaseConfig);
+// console.log('config firebase',FirebaseConfig);
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
